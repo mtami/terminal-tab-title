@@ -1,6 +1,6 @@
 {
   "name": "terminal-tab-title",
-  "description": "Name the terminal tab Claude Code runs in, across tmux, zellij, screen, herdr, WezTerm, kitty, Konsole and OSC terminals",
+  "description": "Name the terminal tab your coding agent runs in: Claude Code, Codex, Cursor, Gemini CLI, opencode",
   "owner": {
     "name": "Mohammad Yaser"
   },
@@ -8,7 +8,7 @@
     {
       "name": "terminal-tab-title",
       "source": "./",
-      "description": "Names the terminal tab Claude Code runs in from your first prompt: tmux, zellij, screen, herdr, WezTerm, kitty, Konsole, ConEmu, plus OSC titles for iTerm2, Terminal.app, Windows Terminal, Ghostty and more"
+      "description": "Names the terminal tab your coding agent runs in from your first prompt: Claude Code, Codex, Cursor, Gemini CLI and opencode, across tmux, zellij, screen, herdr, WezTerm, kitty, Konsole, ConEmu, iTerm2, Terminal.app, Windows Terminal, Ghostty and more"
     }
   ]
 }

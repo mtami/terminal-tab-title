@@ -61,11 +61,19 @@ function oscName(env: Env): string {
   return 'osc'
 }
 
-function isOn(value: string | undefined): boolean {
+export function isOn(value: string | undefined): boolean {
   return value !== undefined && value !== '' && value !== '0' && value.toLowerCase() !== 'false'
 }
 
-export function plan(env: Env, label: string): Plan {
+// Whether an OSC title would last in this agent, and what to say when it wouldn't.
+export type OscPolicy = { isAllowed: boolean; note: string }
+
+const CLAUDE_OSC: (env: Env) => OscPolicy = env => ({
+  isAllowed: isOn(env.CLAUDE_CODE_DISABLE_TERMINAL_TITLE),
+  note: 'Claude Code already sets this terminal’s title; set CLAUDE_CODE_DISABLE_TERMINAL_TITLE=1 to let this plugin name it instead',
+})
+
+export function plan(env: Env, label: string, osc: OscPolicy = CLAUDE_OSC(env)): Plan {
   // Multiplexers first: they own the tab the person sees, and the outer terminal's variables leak into them.
   if (env.HERDR_TAB_ID) {
     return { attempts: [{ backend: 'herdr', run: [env.HERDR_BIN_PATH || 'herdr', 'tab', 'rename', env.HERDR_TAB_ID, label] }] }
@@ -101,19 +109,13 @@ export function plan(env: Env, label: string): Plan {
     attempts.push({ backend: 'conemu', run: ['ConEmuC', '-GuiMacro', 'Rename', '0', label] })
   }
 
-  // An OSC title is what Claude Code itself writes, so it only lasts once Claude Code stops writing it.
-  if (isOn(env.CLAUDE_CODE_DISABLE_TERMINAL_TITLE)) {
+  // Agents that write their own OSC title would overwrite ours, so it only lasts once the agent stops.
+  if (osc.isAllowed) {
     attempts.push({ backend: oscName(env), osc: oscSequence(oscCodeFor(env), label) })
     return { attempts }
   }
 
-  return {
-    attempts,
-    note:
-      attempts.length > 0
-        ? undefined
-        : 'Claude Code already sets this terminal’s title; set CLAUDE_CODE_DISABLE_TERMINAL_TITLE=1 to let this plugin name it instead',
-  }
+  return { attempts, note: attempts.length > 0 ? undefined : osc.note }
 }
 
 type ZellijPane = { id?: unknown; is_plugin?: unknown; tab_id?: unknown }

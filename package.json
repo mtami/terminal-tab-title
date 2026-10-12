@@ -1,0 +1,46 @@
+{
+  "name": "terminal-tab-title",
+  "version": "0.3.0",
+  "description": "Name the terminal tab your coding agent runs in (Claude Code, Codex, Cursor, Gemini CLI, opencode) across tmux, zellij, screen, WezTerm, kitty, Konsole, iTerm2, Ghostty and more",
+  "type": "module",
+  "bin": {
+    "terminal-tab-title": "skills/terminal-tab-title/scripts/tab-title.mjs",
+    "tab-title": "skills/terminal-tab-title/scripts/tab-title.mjs"
+  },
+  "files": [
+    "skills/terminal-tab-title/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "bun build src/cli.ts --target=node --format=esm --banner='#!/usr/bin/env node' --outfile=skills/terminal-tab-title/scripts/tab-title.mjs && chmod +x skills/terminal-tab-title/scripts/tab-title.mjs",
+    "test": "bun test ./tests/cli",
+    "prepublishOnly": "bun run build && bun run test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "terminal",
+    "tab",
+    "title",
+    "claude-code",
+    "codex",
+    "cursor",
+    "gemini-cli",
+    "opencode",
+    "agent-skills",
+    "tmux",
+    "zellij",
+    "wezterm",
+    "kitty"
+  ],
+  "author": "Mohammad Yaser",
+  "license": "MIT",
+  "homepage": "https://github.com/mtami/terminal-tab-title",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mtami/terminal-tab-title.git"
+  },
+  "bugs": "https://github.com/mtami/terminal-tab-title/issues"
+}
